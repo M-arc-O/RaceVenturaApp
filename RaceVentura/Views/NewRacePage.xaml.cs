@@ -20,12 +20,13 @@ namespace RaceVentura.Views
             _dataStore = DependencyService.Get<IDataStore<Race>>();
         }
 
-        async void Cancel_Clicked(object sender, EventArgs e)
+        private async void Cancel_Clicked(object sender, EventArgs e)
         {
+            QrScanner.IsScanning = false;
             await Navigation.PopModalAsync();
         }
 
-        async void ZXingScannerView_OnScanResult(ZXing.Result result)
+        private async void ZXingScannerView_OnScanResult(ZXing.Result result)
         {
             try
             {

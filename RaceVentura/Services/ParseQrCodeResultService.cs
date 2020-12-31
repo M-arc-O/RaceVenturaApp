@@ -34,6 +34,10 @@ namespace RaceVentura.Services
                         retVal.TeamId = Guid.Parse(itemSplit[1].Trim());
                         break;
 
+                    case "PointId":
+                        retVal.PointId = Guid.Parse(itemSplit[1].Trim());
+                        break;
+
                     default:
                         throw new Exception("Unknown field in QR code result.");
                 }

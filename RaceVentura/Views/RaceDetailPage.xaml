@@ -3,11 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RaceVentura.Views.RaceDetailPage"
              Title="{Binding Name}">
+    
+    <ContentPage.Content>
+        <StackLayout Spacing="20" Padding="15" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout VerticalOptions="Start">
+                <Label Text="Race:" FontSize="Medium" />
+                <Label Text="{Binding Item.Name}" FontSize="Medium" />
+            </StackLayout>
+        
+            <StackLayout VerticalOptions="CenterAndExpand">
+                <Button x:Name="ScanQrCodeButton" Text="Scan QR code" Clicked="ScanQrCodeButton_Clicked" />
+            </StackLayout>
 
-    <StackLayout Spacing="20" Padding="15">
-        <Label Text="Race:" FontSize="Medium" />
-        <Label Text="{Binding Item.Name}" FontSize="Small"/>
-
-        <Label x:Name="ResultsUrlLabel" Text="Results url:" FontSize="Medium" />
-    </StackLayout>
+            <StackLayout VerticalOptions="End">
+                <Button Text="Go to race results" Clicked="ResultButton_Clicked" />
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
 </ContentPage>
