@@ -10,20 +10,20 @@ using RaceVentura.Views;
 
 namespace RaceVentura.ViewModels
 {
-    public class ItemsViewModel : BaseViewModel
+    public class RacesViewModel : BaseViewModel
     {
-        public ObservableCollection<Item> Items { get; set; }
+        public ObservableCollection<Race> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
 
-        public ItemsViewModel()
+        public RacesViewModel()
         {
             Title = "Browse";
-            Items = new ObservableCollection<Item>();
+            Items = new ObservableCollection<Race>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
+            MessagingCenter.Subscribe<NewRacePage, Race>(this, "AddItem", async (obj, item) =>
             {
-                var newItem = item as Item;
+                var newItem = item as Race;
                 Items.Add(newItem);
                 await DataStore.AddItemAsync(newItem);
             });

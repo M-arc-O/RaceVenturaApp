@@ -1,12 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RaceVentura.Views.ItemsPage"
-             Title="{Binding Title}"
+             x:Class="RaceVentura.Views.RacesPage"
+             Title="{Binding Name}"
              x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Clicked="AddItem_Clicked" />
+        <ToolbarItem Text="Add race" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
 
     <RefreshView IsRefreshing="{Binding IsBusy, Mode=TwoWay}" Command="{Binding LoadItemsCommand}">
@@ -15,14 +15,10 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Padding="10">
-                        <Label Text="{Binding Text}" 
+                        <Label Text="{Binding Name}" 
                                 LineBreakMode="NoWrap" 
                                 Style="{DynamicResource ListItemTextStyle}" 
                                 FontSize="16" />
-                        <Label Text="{Binding Description}" 
-                                LineBreakMode="NoWrap"
-                                Style="{DynamicResource ListItemDetailTextStyle}"
-                                FontSize="13" />
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer NumberOfTapsRequired="1" Tapped="OnItemSelected"></TapGestureRecognizer>
                         </StackLayout.GestureRecognizers>

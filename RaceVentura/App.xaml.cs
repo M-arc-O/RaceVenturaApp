@@ -1,6 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 using RaceVentura.Services;
 using RaceVentura.Views;
 
@@ -13,7 +11,9 @@ namespace RaceVentura
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
+            DependencyService.Register<SQLiteDataStore>();
+            DependencyService.Register<ParseQrCodeResultService>();
+            DependencyService.Register<RaceVenturaApiClient>();
             MainPage = new MainPage();
         }
 

@@ -1,39 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
 using RaceVentura.Models;
-using RaceVentura.Views;
 using RaceVentura.ViewModels;
+using Xamarin.Forms;
 
 namespace RaceVentura.Views
 {
-    public partial class ItemsPage : ContentPage
+    public partial class RacesPage : ContentPage
     {
-        ItemsViewModel viewModel;
+        RacesViewModel viewModel;
 
-        public ItemsPage()
+        public RacesPage()
         {
             InitializeComponent();
 
-            BindingContext = viewModel = new ItemsViewModel();
+            BindingContext = viewModel = new RacesViewModel();
         }
 
         async void OnItemSelected(object sender, EventArgs args)
         {
             var layout = (BindableObject)sender;
-            var item = (Item)layout.BindingContext;
-            await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
+            var item = (Race)layout.BindingContext;
+            await Navigation.PushAsync(new RaceDetailPage(new RaceDetailViewModel(item)));
         }
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
+            await Navigation.PushModalAsync(new NavigationPage(new NewRacePage()));
         }
 
         protected override void OnAppearing()

@@ -12,7 +12,7 @@ namespace RaceVentura.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public IDataStore<Race> DataStore => DependencyService.Get<IDataStore<Race>>();
 
         bool isBusy = false;
         public bool IsBusy

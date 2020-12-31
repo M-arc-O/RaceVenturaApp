@@ -6,10 +6,10 @@ namespace RaceVentura.Services
 {
     public interface IDataStore<T>
     {
-        Task<bool> AddItemAsync(T item);
-        Task<bool> UpdateItemAsync(T item);
-        Task<bool> DeleteItemAsync(string id);
-        Task<T> GetItemAsync(string id);
+        Task<int> AddItemAsync(T item);
+        Task<int> UpdateItemAsync(T item);
+        Task<int> DeleteItemAsync(Guid id);
+        Task<T> GetItemAsync(Guid id);
         Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false);
     }
 }
