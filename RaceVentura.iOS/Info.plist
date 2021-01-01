@@ -36,5 +36,7 @@
 	<string>Assets.xcassets/AppIcon.appiconset</string>
 	<key>NSCameraUsageDescription</key>
 	<string>RaceVentura needs access to your phones camera to be able to scan QR codes.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>RaceVentura needs access to your phones location to be able to check if you are in the right location when you register a point.</string>
 </dict>
 </plist>

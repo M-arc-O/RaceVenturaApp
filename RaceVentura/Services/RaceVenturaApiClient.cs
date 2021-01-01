@@ -34,15 +34,48 @@ namespace RaceVentura.Services
             StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(uri, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
                 model = JsonConvert.DeserializeObject<RegisterToRaceModel>(responseContent);
             }
             else
             {
+                ProcessApiError(responseContent, "register to race");
+            }
 
+            return model;
+        }
+
+        public async Task<RegisterPointModel> RegisterPoint(Guid raceId, Guid uniqueId, Guid pointId, double latitude, double longitude, string answer)
+        {
+            Uri uri = new Uri($"{appApiUrl}/registerpoint");
+
+            var model = new RegisterPointModel
+            {
+                RaceId = raceId,
+                PointId = pointId,
+                UniqueId = uniqueId,
+                Latitude = latitude,
+                Longitude = longitude,
+                Question = null,
+                Answer = answer.Trim()
+            };
+
+            string json = JsonConvert.SerializeObject(model);
+            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(uri, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                model = JsonConvert.DeserializeObject<RegisterPointModel>(responseContent);
+            }
+            else
+            {
+                ProcessApiError(responseContent, "register to race");
             }
 
             return model;
@@ -51,6 +84,17 @@ namespace RaceVentura.Services
         public async void GoToResultPage(Guid raceId)
         {
             await Browser.OpenAsync(new Uri($"{apiUrl}results/getraceresults?raceid={raceId}"), BrowserLaunchMode.SystemPreferred);
+        }
+
+        private static void ProcessApiError(string responseContent, string function)
+        {
+            ErrorCodes errorCode;
+            if (Enum.TryParse(responseContent, out errorCode))
+            {
+                throw new RaceVenturaApiException($"Something went wrong in {function}.", errorCode);
+            }
+
+            throw new Exception("Could not parse error code.");
         }
     }
 }

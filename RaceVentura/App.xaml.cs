@@ -14,6 +14,7 @@ namespace RaceVentura
             DependencyService.Register<SQLiteDataStore>();
             DependencyService.Register<ParseQrCodeResultService>();
             DependencyService.Register<RaceVenturaApiClient>();
+            DependencyService.Register<LocationService>();
             MainPage = new MainPage();
         }
 

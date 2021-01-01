@@ -8,6 +8,8 @@ namespace RaceVentura.Services
     {
         Task<RegisterToRaceModel> RegisterToRace(Guid raceId, Guid teamId, Guid uniqueId);
 
+        Task<RegisterPointModel> RegisterPoint(Guid raceId, Guid uniqueId, Guid pointId, double latitude, double longitude, string answer);
+
         void GoToResultPage(Guid raceId);
     }
 }

@@ -73,6 +73,7 @@ namespace RaceVentura.Views
                             ShowPopupAndLeavePage("Error", "You cannot register more devices.");
                         });
                         break;
+
                     default:
                         Device.BeginInvokeOnMainThread(() =>
                         {

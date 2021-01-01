@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using RaceVentura.Models;
+using RaceVentura.RaceVenturaApiModels;
 using RaceVentura.Services;
 using RaceVentura.ViewModels;
 using Xamarin.Forms;
@@ -10,6 +12,7 @@ namespace RaceVentura.Views
     {
         private readonly IParseQrCodeResultService _qrCodeResultParser;
         private readonly IRaceVenturaApiClient _raceVenturaApiClient;
+        private readonly ILocationService _locationService;
 
         RaceDetailViewModel viewModel;
 
@@ -21,6 +24,7 @@ namespace RaceVentura.Views
 
             _qrCodeResultParser = DependencyService.Get<IParseQrCodeResultService>();
             _raceVenturaApiClient = DependencyService.Get<IRaceVenturaApiClient>();
+            _locationService = DependencyService.Get<ILocationService>();
         }
 
         private async void ScanQrCodeButton_Clicked(System.Object sender, System.EventArgs e)
@@ -35,9 +39,22 @@ namespace RaceVentura.Views
 
                 switch (parsedResult.QrCodeType)
                 {
-                    case Models.QrCodeType.RegisterToRace:
+                    case QrCodeType.RegisterPoint:
+                        await HandleRegisterPoint(parsedResult);
+                        break;
+
+                    case QrCodeType.RegisterStageEnd:
+                        await DisplayAlert("Yes!", "This is a stage end QR code.", "Ok");
+                        break;
+
+                    case QrCodeType.RegisterRaceEnd:
+                        await DisplayAlert("Yes!", "This is a race end QR code.", "Ok");
+                        break;
+
+                    case QrCodeType.RegisterToRace:
                         await DisplayAlert("Error", "This is a race registration QR code.", "Ok");
                         break;
+
                     default:
                         await DisplayAlert("Error", "Unknown QR code type.", "Ok");
                         break;
@@ -49,6 +66,55 @@ namespace RaceVentura.Views
                 {
                     DisplayAlert("Error", "Something went wrong while scanning the QR code.", "Ok");
                 });
+            }
+        }
+
+        private async Task HandleRegisterPoint(QrCodeResult parsedResult)
+        {
+            var answer = string.Empty;
+            try
+            {
+                await _locationService.GetLocation();
+
+                var response = await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, 0, 0, string.Empty);
+
+                if (!string.IsNullOrEmpty(response.Question))
+                {
+                    answer = await DisplayPromptAsync("Question!", response.Question);
+
+                    if (string.IsNullOrEmpty(answer))
+                    {
+                        throw new RaceVenturaApiException("No answer entered.", ErrorCodes.AnswerIncorrect);
+                    }
+
+                    await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, 0, 0, answer);
+                }
+
+                await DisplayAlert("Congratulations", "Point registered! Good luck finding the next point!", "Ok");
+            }
+            catch (RaceVenturaApiException ex)
+            {
+                switch (ex.ErrorCode)
+                {
+                    case ErrorCodes.Duplicate:
+                        await DisplayAlert("Error", "This point is already registered for your team! Quickly move on to the next point!", "Ok");
+                        break;
+
+                    case ErrorCodes.AnswerIncorrect:
+                        await DisplayAlert("Error", $"The answer '{answer}' is incorrect!", "Ok");
+                        break;
+
+                    case ErrorCodes.NotActiveStage:
+                        await DisplayAlert("Error", "You cannot register this point because it is not in the stage you are doing right now!", "Ok");
+                        break;
+
+                    case ErrorCodes.RaceNotStarted:
+                        await DisplayAlert("Error", "You cannot register this point because the race did not start yet!", "Ok");
+                        break;
+
+                    default:
+                        throw new Exception("Unknown error code.");
+                }
             }
         }
 

@@ -30,6 +30,10 @@ namespace RaceVentura.Services
                         retVal.RaceId = Guid.Parse(itemSplit[1].Trim());
                         break;
 
+                    case "StageId":
+                        retVal.StageId = Guid.Parse(itemSplit[1].Trim());
+                        break;
+
                     case "TeamId":
                         retVal.TeamId = Guid.Parse(itemSplit[1].Trim());
                         break;
