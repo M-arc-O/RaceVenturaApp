@@ -8,7 +8,7 @@ namespace RaceVentura.Services
     {
         Task<int> AddItemAsync(T item);
         Task<int> UpdateItemAsync(T item);
-        Task<int> DeleteItemAsync(Guid id);
+        Task<int> DeleteItemAsync(T item);
         Task<T> GetItemAsync(Guid id);
         Task<IEnumerable<T>> GetItemsAsync(bool forceRefresh = false);
     }

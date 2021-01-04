@@ -17,14 +17,14 @@ namespace RaceVentura.Views
             BindingContext = viewModel = new RacesViewModel();
         }
 
-        async void OnItemSelected(object sender, EventArgs args)
+        private async void OnItemSelected(object sender, EventArgs args)
         {
             var layout = (BindableObject)sender;
             var item = (Race)layout.BindingContext;
             await Navigation.PushAsync(new RaceDetailPage(new RaceDetailViewModel(item)));
         }
 
-        async void AddItem_Clicked(object sender, EventArgs e)
+        private async void AddItem_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushModalAsync(new NavigationPage(new NewRacePage()));
         }

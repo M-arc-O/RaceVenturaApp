@@ -4,6 +4,7 @@ using RaceVentura.Models;
 using RaceVentura.RaceVenturaApiModels;
 using RaceVentura.Services;
 using RaceVentura.ViewModels;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace RaceVentura.Views
@@ -14,7 +15,7 @@ namespace RaceVentura.Views
         private readonly IRaceVenturaApiClient _raceVenturaApiClient;
         private readonly ILocationService _locationService;
 
-        RaceDetailViewModel viewModel;
+        private readonly RaceDetailViewModel viewModel;
 
         public RaceDetailPage(RaceDetailViewModel viewModel)
         {
@@ -35,30 +36,33 @@ namespace RaceVentura.Views
                 scanner.FlashButtonText = "Enable flashlight";
                 var result = await scanner.Scan();
 
-                var parsedResult = _qrCodeResultParser.ParseResult(result.Text);
-
-                switch (parsedResult.QrCodeType)
+                if (result != null)
                 {
-                    case QrCodeType.RegisterPoint:
-                        await HandleRegisterPoint(parsedResult);
-                        break;
+                    var parsedResult = _qrCodeResultParser.ParseResult(result.Text);
 
-                    case QrCodeType.RegisterStageEnd:
-                        await DisplayAlert("Yes!", "This is a stage end QR code.", "Ok");
-                        break;
+                    switch (parsedResult.QrCodeType)
+                    {
+                        case QrCodeType.RegisterPoint:
+                            await HandleRegisterPoint(parsedResult);
+                            break;
 
-                    case QrCodeType.RegisterRaceEnd:
-                        await DisplayAlert("Yes!", "This is a race end QR code.", "Ok");
-                        break;
+                        case QrCodeType.RegisterStageEnd:
+                            await HandleRegisterStageEnd(parsedResult);
+                            break;
 
-                    case QrCodeType.RegisterToRace:
-                        await DisplayAlert("Error", "This is a race registration QR code.", "Ok");
-                        break;
+                        case QrCodeType.RegisterRaceEnd:
+                            await HandleRegisterRaceEnd(parsedResult);
+                            break;
 
-                    default:
-                        await DisplayAlert("Error", "Unknown QR code type.", "Ok");
-                        break;
-                }
+                        case QrCodeType.RegisterToRace:
+                            await DisplayAlert("Error", "This is a race registration QR code. If you want to register to a race use the add race button in the main screen.", "Ok");
+                            break;
+
+                        default:
+                            await DisplayAlert("Error", "Unknown QR code type.", "Ok");
+                            break;
+                    }
+                }                
             }
             catch
             {
@@ -74,9 +78,9 @@ namespace RaceVentura.Views
             var answer = string.Empty;
             try
             {
-                await _locationService.GetLocation();
+                var location = await _locationService.GetLocation();
 
-                var response = await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, 0, 0, string.Empty);
+                var response = await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, location.Latitude, location.Longitude, string.Empty);
 
                 if (!string.IsNullOrEmpty(response.Question))
                 {
@@ -87,10 +91,14 @@ namespace RaceVentura.Views
                         throw new RaceVenturaApiException("No answer entered.", ErrorCodes.AnswerIncorrect);
                     }
 
-                    await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, 0, 0, answer);
+                    await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, location.Latitude, location.Longitude, answer);
                 }
 
                 await DisplayAlert("Congratulations", "Point registered! Good luck finding the next point!", "Ok");
+            }
+            catch (PermissionException)
+            {
+                await DisplayAlert("Error", "RaceVentura is not allowed to access your location. This is needed when registering points to check if you are on the right loction. Please go to settings and grant RaceVentura access to your location.", "Ok");
             }
             catch (RaceVenturaApiException ex)
             {
@@ -98,6 +106,10 @@ namespace RaceVentura.Views
                 {
                     case ErrorCodes.Duplicate:
                         await DisplayAlert("Error", "This point is already registered for your team! Quickly move on to the next point!", "Ok");
+                        break;
+
+                    case ErrorCodes.CoordinatesIncorrect:
+                        await DisplayAlert("Error", "You are not at the right location for this point. Make sure you are on the right spot!", "Ok");
                         break;
 
                     case ErrorCodes.AnswerIncorrect:
@@ -116,6 +128,75 @@ namespace RaceVentura.Views
                         throw new Exception("Unknown error code.");
                 }
             }
+        }
+
+        private async Task HandleRegisterStageEnd(QrCodeResult parsedResult)
+        {
+            try
+            {
+                var result = await DisplayAlert("Important", "You are about to finish a stage. Afterwards you cannot register anymore points for this stage and it cannot be undone. Are you sure you want to continue?", "Yes", "No");
+
+                if (result)
+                {
+                    var response = await _raceVenturaApiClient.RegisterStageEnd(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.StageId);
+
+                    await DisplayAlert("Done", "The stage is closed, have fun with the next one!", "Ok");
+                }
+            }
+            catch (RaceVenturaApiException ex)
+            {
+                switch (ex.ErrorCode)
+                {
+                    case ErrorCodes.NotActiveStage:
+                        await DisplayAlert("Error", "The QR code you scanned to end the stage is not the right code for the stage you are in now!", "Ok");
+                        break;
+
+                    case ErrorCodes.RaceNotStarted:
+                        await DisplayAlert("Error", "You cannot end this stage because the race has not started yet!", "Ok");
+                        break;
+
+                    default:
+                        throw new Exception("Unknown error code.");
+                }
+            }
+        }
+
+        private async Task HandleRegisterRaceEnd(QrCodeResult parsedResult)
+        {
+            try
+            {
+                var result = await DisplayAlert("Important", "You are about to finish the race and this cannot be undone. Are you sure you want to continue?", "Yes", "No");
+
+                if (result)
+                {
+                    var response = await _raceVenturaApiClient.RegisterRaceEnd(parsedResult.RaceId, viewModel.Item.UniqueId);
+
+                    await EndRace("You finished the race! Congratulations, now go take a well deserved shower!");
+                }
+            }
+            catch (RaceVenturaApiException ex)
+            {
+                switch (ex.ErrorCode)
+                {
+                    case ErrorCodes.RaceNotStarted:
+                        await DisplayAlert("Error", "You cannot end this stage because the race has not started yet!", "Ok");
+                        break;
+
+                    case ErrorCodes.RaceEnded:
+                        await EndRace("The race is over! Congratulations, now go take a well deserved shower!");
+                        break;
+
+                    default:
+                        throw new Exception("Unknown error code.");
+                }
+            }
+        }
+
+        private async Task EndRace(string message)
+        {
+            viewModel.Item.RaceActive = false;
+            await viewModel.DataStore.UpdateItemAsync(viewModel.Item);
+            await DisplayAlert("Done", message, "Ok");
         }
 
         private void ResultButton_Clicked(System.Object sender, System.EventArgs e)

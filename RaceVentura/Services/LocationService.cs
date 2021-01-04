@@ -9,34 +9,28 @@ namespace RaceVentura.Services
     {
         CancellationTokenSource cts;
 
-        public async Task GetLocation()
+        public async Task<Location> GetLocation()
         {
             try
             {
+                var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+
+                if (status != PermissionStatus.Granted)
+                {
+                    throw new PermissionException("Location permision not granted.");
+                }
+
                 var request = new GeolocationRequest(GeolocationAccuracy.High, TimeSpan.FromSeconds(10));
                 cts = new CancellationTokenSource();
-                var location = await Geolocation.GetLocationAsync(request, cts.Token);
-
-                if (location != null)
-                {
-                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
-                }
+                return await Geolocation.GetLocationAsync(request, cts.Token);
             }
-            catch (FeatureNotSupportedException fnsEx)
+            catch (FeatureNotSupportedException)
             {
-                // Handle not supported on device exception
+                throw;
             }
-            catch (FeatureNotEnabledException fneEx)
+            catch (FeatureNotEnabledException)
             {
-                // Handle not enabled on device exception
-            }
-            catch (PermissionException pEx)
-            {
-                // Handle permission exception
-            }
-            catch (Exception ex)
-            {
-                // Unable to get location
+                throw;
             }
         }
 

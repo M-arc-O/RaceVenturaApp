@@ -81,6 +81,63 @@ namespace RaceVentura.Services
             return model;
         }
 
+        public async Task<RegisterStageEndModel> RegisterStageEnd(Guid raceId, Guid uniqueId, Guid stageId)
+        {
+            Uri uri = new Uri($"{appApiUrl}/registerstageend");
+
+            var model = new RegisterStageEndModel
+            {
+                RaceId = raceId,
+                UniqueId = uniqueId,
+                StageId = stageId
+            };
+
+            string json = JsonConvert.SerializeObject(model);
+            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(uri, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                model = JsonConvert.DeserializeObject<RegisterStageEndModel>(responseContent);
+            }
+            else
+            {
+                ProcessApiError(responseContent, "register stage end");
+            }
+
+            return model;
+        }
+
+        public async Task<RegisterRaceEndModel> RegisterRaceEnd(Guid raceId, Guid uniqueId)
+        {
+            Uri uri = new Uri($"{appApiUrl}/registerraceend");
+
+            var model = new RegisterRaceEndModel
+            {
+                RaceId = raceId,
+                UniqueId = uniqueId
+            };
+
+            string json = JsonConvert.SerializeObject(model);
+            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(uri, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                model = JsonConvert.DeserializeObject<RegisterRaceEndModel>(responseContent);
+            }
+            else
+            {
+                ProcessApiError(responseContent, "register race end");
+            }
+
+            return model;
+        }
+
         public async void GoToResultPage(Guid raceId)
         {
             await Browser.OpenAsync(new Uri($"{apiUrl}results/getraceresults?raceid={raceId}"), BrowserLaunchMode.SystemPreferred);

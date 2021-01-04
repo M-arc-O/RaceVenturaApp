@@ -10,6 +10,10 @@ namespace RaceVentura.Services
 
         Task<RegisterPointModel> RegisterPoint(Guid raceId, Guid uniqueId, Guid pointId, double latitude, double longitude, string answer);
 
+        Task<RegisterStageEndModel> RegisterStageEnd(Guid raceId, Guid uniqueId, Guid stageId);
+
+        Task<RegisterRaceEndModel> RegisterRaceEnd(Guid raceId, Guid uniqueId);
+
         void GoToResultPage(Guid raceId);
     }
 }

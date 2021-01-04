@@ -45,10 +45,9 @@ namespace RaceVentura.Services
             return _database.InsertAsync(item);
         }
 
-        public async Task<int> DeleteItemAsync(Guid id)
+        public async Task<int> DeleteItemAsync(Race item)
         {
-            var race = await GetItemAsync(id);
-            return await _database.DeleteAsync(race);
+            return await _database.DeleteAsync(item);
         }
 
         public Task<Race> GetItemAsync(Guid id)

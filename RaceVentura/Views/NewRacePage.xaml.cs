@@ -30,6 +30,8 @@ namespace RaceVentura.Views
         {
             try
             {
+                Device.BeginInvokeOnMainThread(() => QrScanner.IsScanning = false);
+
                 var qrCodeResult = _qrCodeResultParser.ParseResult(result.Text);
 
                 if (qrCodeResult.QrCodeType != QrCodeType.RegisterToRace)
@@ -54,9 +56,10 @@ namespace RaceVentura.Views
 
                 var race = new Race
                 {
-                    UniqueId = apiResponse.UniqueId,
+                    RaceId = apiResponse.RaceId,
                     Name = apiResponse.Name,
-                    RaceId = apiResponse.RaceId
+                    UniqueId = apiResponse.UniqueId,
+                    RaceActive = true
                 };
 
                 MessagingCenter.Send(this, "AddItem", race);
@@ -70,14 +73,14 @@ namespace RaceVentura.Views
                     case ErrorCodes.MaxIdsReached:
                         Device.BeginInvokeOnMainThread(() =>
                         {
-                            ShowPopupAndLeavePage("Error", "You cannot register more devices.");
+                            ShowPopupAndLeavePage("Error", "You cannot register more devices to this team.");
                         });
                         break;
 
                     default:
                         Device.BeginInvokeOnMainThread(() =>
                         {
-                            ShowPopupAndLeavePage("Error", "Something wend wrong please try again.");
+                            ShowPopupAndLeavePage("Error", "Something went wrong please try again.");
                         });
                         break;
                 }
@@ -86,7 +89,7 @@ namespace RaceVentura.Views
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    ShowPopupAndLeavePage("Error", "Something wend wrong please try again.");
+                    ShowPopupAndLeavePage("Error", "Something went wrong please try again.");
                 });
             }
         }
