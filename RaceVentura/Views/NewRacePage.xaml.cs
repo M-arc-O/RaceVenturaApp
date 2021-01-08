@@ -2,6 +2,7 @@
 using RaceVentura.Models;
 using RaceVentura.RaceVenturaApiModels;
 using RaceVentura.Services;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace RaceVentura.Views
@@ -47,6 +48,15 @@ namespace RaceVentura.Views
                 {
                     Device.BeginInvokeOnMainThread(() => {
                         ShowPopupAndLeavePage("Error", "You are already registered to this race.");
+                    });
+                    return;
+                }
+
+                var current = Connectivity.NetworkAccess;
+                if (current != NetworkAccess.Internet)
+                {
+                    Device.BeginInvokeOnMainThread(() => {
+                        ShowPopupAndLeavePage("Error", "You need an active internet connection for this app to work. Please connect to the internet.");
                     });
                     return;
                 }

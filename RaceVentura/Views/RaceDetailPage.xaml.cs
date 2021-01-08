@@ -32,9 +32,23 @@ namespace RaceVentura.Views
         {
             try
             {
+                var current = Connectivity.NetworkAccess;
+                if (current != NetworkAccess.Internet)
+                {
+                    await DisplayAlert("Error", "You need an active internet connection for this app to work. Please connect to the internet.", "Ok");
+                    return;
+                }
+
+                viewModel.NotProcessing = false;
+                ScanQrCodeButton.Text = "Scanning";
+
                 var scanner = new ZXing.Mobile.MobileBarcodeScanner();
+                scanner.TopText = "Scan a QR code";
                 scanner.FlashButtonText = "Enable flashlight";
+                scanner.CancelButtonText = "Cancel";
                 var result = await scanner.Scan();
+
+                ScanQrCodeButton.Text = "Processing";
 
                 if (result != null)
                 {
@@ -70,6 +84,11 @@ namespace RaceVentura.Views
                 {
                     DisplayAlert("Error", "Something went wrong while scanning the QR code.", "Ok");
                 });
+            }
+            finally
+            {
+                viewModel.NotProcessing = true;
+                ScanQrCodeButton.Text = "Scan QR code";
             }
         }
 
@@ -194,8 +213,7 @@ namespace RaceVentura.Views
 
         private async Task EndRace(string message)
         {
-            viewModel.Item.RaceActive = false;
-            await viewModel.DataStore.UpdateItemAsync(viewModel.Item);
+            viewModel.RaceActive = false;
             await DisplayAlert("Done", message, "Ok");
         }
 

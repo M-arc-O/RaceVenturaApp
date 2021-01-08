@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:RaceVentura.Converters"
              x:Class="RaceVentura.Views.RaceDetailPage"
              Title="{Binding Name}">
     
     <ContentPage.Resources>
+        <local:AllTrueMultiConverter x:Key="AllTrueMultiConverter" />
         <ResourceDictionary>
             <Color x:Key="Primary">#2196F3</Color>
             <Color x:Key="Accent">#96d1ff</Color>
@@ -24,8 +26,14 @@
                         Text="Scan QR code"
                         Clicked="ScanQrCodeButton_Clicked" 
                         BackgroundColor="{StaticResource Primary}"
-                        TextColor="White"
-                        IsEnabled="{Binding Item.RaceActive}"/>
+                        TextColor="White">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource AllTrueMultiConverter}">
+                            <Binding Path="RaceActive" />
+                            <Binding Path="NotProcessing" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
             </StackLayout>
 
             <StackLayout VerticalOptions="End">
