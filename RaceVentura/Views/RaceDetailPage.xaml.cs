@@ -227,7 +227,7 @@ namespace RaceVentura.Views
             {
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    DisplayAlert("Error", "Something went wrong when opening a browser.", "Ok");
+                    DisplayAlert("Error", "Something went wrong when opening the browser.", "Ok");
                 });
             }
         }

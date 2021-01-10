@@ -11,6 +11,7 @@ namespace RaceVentura.Services
     public class RaceVenturaApiClient : IRaceVenturaApiClient
     {
         private readonly HttpClient _httpClient;
+        private const string webUrl = "https://raceventura.nl/#/";
         private const string apiUrl = "https://raceventura.westeurope.cloudapp.azure.com/api/";
         private readonly string appApiUrl = $"{apiUrl}appapi";
 
@@ -140,7 +141,7 @@ namespace RaceVentura.Services
 
         public async void GoToResultPage(Guid raceId)
         {
-            await Browser.OpenAsync(new Uri($"{apiUrl}results/getraceresults?raceid={raceId}"), BrowserLaunchMode.SystemPreferred);
+            await Browser.OpenAsync(new Uri($"{webUrl}results?raceid={raceId}"), BrowserLaunchMode.SystemPreferred);
         }
 
         private static void ProcessApiError(string responseContent, string function)
