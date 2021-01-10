@@ -9,7 +9,7 @@ namespace RaceVentura.ViewModels
         public AboutViewModel()
         {
             Title = "About";
-            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://raceventura.nl"));
+            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://raceventura.nl/#/appsupport"));
         }
 
         public ICommand OpenWebCommand { get; }

@@ -7,6 +7,7 @@
     
     <ContentPage.Resources>
         <local:AllTrueMultiConverter x:Key="AllTrueMultiConverter" />
+        <local:InvertBoolConverter x:Key="InvertBoolConverter" />
         <ResourceDictionary>
             <Color x:Key="Primary">#2196F3</Color>
             <Color x:Key="Accent">#96d1ff</Color>
@@ -38,7 +39,8 @@
 
             <StackLayout VerticalOptions="End">
                 <Button Text="Go to race results"
-                        Clicked="ResultButton_Clicked" 
+                        Clicked="ResultButton_Clicked"
+                        IsEnabled="{Binding RaceActive, Converter={StaticResource InvertBoolConverter}}"
                         BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
             </StackLayout>

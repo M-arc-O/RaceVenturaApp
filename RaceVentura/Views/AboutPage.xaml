@@ -46,7 +46,8 @@
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
-                                <Span Text="This app is written for adventure races." />
+                                <Span Text="This app is written for adventure races and scavenger hunts." />
+                                <Span Text="To learn more on how to use this app push the button below." />
                             </FormattedString.Spans>
                         </FormattedString>
                     </Label.FormattedText>
