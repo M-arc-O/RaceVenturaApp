@@ -15,6 +15,7 @@
     <MtouchEnableSGenConc>true</MtouchEnableSGenConc>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <ProvisioningType>automatic</ProvisioningType>
+    <ReleaseVersion>1.0.1</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,8 +36,10 @@
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
+    <CodesignProvision>RaceVenturaProfile</CodesignProvision>
+    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -61,9 +64,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
+    <CodesignProvision>RaceVenturaAppStoreProfile</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -82,7 +86,6 @@
     <BundleResource Include="Resources\tab_feed.png" />
     <BundleResource Include="Resources\tab_feed%402x.png" />
     <BundleResource Include="Resources\tab_feed%403x.png" />
-    <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\RaceVenturaIcon40.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\RaceVenturaIcon60.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\RaceVenturaIcon58.png" />
@@ -100,10 +103,11 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\RaceVenturaIcon76.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\RaceVenturaIcon152.png" />
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\RaceVenturaIcon167.png" />
-    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\RaceVenturaIcon.png" />
     <BundleResource Include="Resources\RaceVenturaLogo.png" />
     <BundleResource Include="Resources\RaceVenturaLogo%402.png" />
     <BundleResource Include="Resources\RaceVenturaLogo%403.png" />
+    <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\RaceVenturaIcon.png" />
+    <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
