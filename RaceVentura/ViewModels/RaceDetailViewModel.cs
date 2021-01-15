@@ -1,5 +1,7 @@
-﻿using RaceVentura.Models;
-using Xamarin.Forms;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using RaceVentura.Models;
 
 namespace RaceVentura.ViewModels
 {
@@ -33,6 +35,23 @@ namespace RaceVentura.ViewModels
             NotProcessing = true;
             Title = item?.Name;
             Item = item;
+        }
+
+        public async Task AddPoint(Models.Point point)
+        {
+            if (Item.Points == null)
+            {
+                Item.Points = new List<Models.Point>();
+            }
+
+            var existingPoint = Item.Points.FirstOrDefault(p => p.PointId == point.PointId);
+
+            if (existingPoint == null)
+            {
+                Item.Points.Add(point);
+            }
+
+            await DataStore.UpdateItemAsync(Item);
         }
     }
 }

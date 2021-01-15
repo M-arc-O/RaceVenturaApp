@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SQLite;
 
 namespace RaceVentura.Models
@@ -11,5 +12,6 @@ namespace RaceVentura.Models
         public string Name { get; set; }
         public Guid UniqueId { get; set; }
         public bool RaceActive { get; set; }
+        public List<Point> Points { get; set; }
     }
 }

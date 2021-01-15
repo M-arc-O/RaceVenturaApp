@@ -32,13 +32,6 @@ namespace RaceVentura.Views
         {
             try
             {
-                var current = Connectivity.NetworkAccess;
-                if (current != NetworkAccess.Internet)
-                {
-                    await DisplayAlert("Error", "You need an active internet connection for this app to work. Please connect to the internet.", "Ok");
-                    return;
-                }
-
                 viewModel.NotProcessing = false;
                 ScanQrCodeButton.Text = "Scanning";
 
@@ -95,9 +88,26 @@ namespace RaceVentura.Views
         private async Task HandleRegisterPoint(QrCodeResult parsedResult)
         {
             var answer = string.Empty;
+
             try
             {
                 var location = await _locationService.GetLocation();
+
+                var point = new Models.Point
+                {
+                    PointId = parsedResult.PointId,
+                    Latitude = location.Latitude,
+                    Longitude = location.Longitude,
+                    Registered = false
+                };
+
+                var current = Connectivity.NetworkAccess;
+                if (current != NetworkAccess.Internet)
+                {
+                    await DisplayAlert("Warning", "You do not have an active internet connection. The point will be registered as soon as your phone is connected to the internet again.", "Ok");
+                    await viewModel.AddPoint(point);
+                    return;
+                }
 
                 var response = await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, location.Latitude, location.Longitude, string.Empty);
 
@@ -113,6 +123,7 @@ namespace RaceVentura.Views
                     await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, location.Latitude, location.Longitude, answer);
                 }
 
+                await viewModel.AddPoint(point);
                 await DisplayAlert("Congratulations", "Point registered! Good luck finding the next point!", "Ok");
             }
             catch (PermissionException)
@@ -153,6 +164,13 @@ namespace RaceVentura.Views
         {
             try
             {
+                var current = Connectivity.NetworkAccess;
+                if (current != NetworkAccess.Internet)
+                {
+                    await DisplayAlert("Error", "You need an active internet connection to finish a stage. Please connect to the internet.", "Ok");
+                    return;
+                }
+
                 var result = await DisplayAlert("Important", "You are about to finish a stage. Afterwards you cannot register anymore points for this stage and it cannot be undone. Are you sure you want to continue?", "Yes", "No");
 
                 if (result)
@@ -184,6 +202,13 @@ namespace RaceVentura.Views
         {
             try
             {
+                var current = Connectivity.NetworkAccess;
+                if (current != NetworkAccess.Internet)
+                {
+                    await DisplayAlert("Error", "You need an active internet connection to finish the race. Please connect to the internet.", "Ok");
+                    return;
+                }
+
                 var result = await DisplayAlert("Important", "You are about to finish the race and this cannot be undone. Are you sure you want to continue?", "Yes", "No");
 
                 if (result)
