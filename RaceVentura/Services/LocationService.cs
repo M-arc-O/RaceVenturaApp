@@ -50,13 +50,10 @@ namespace RaceVentura.Services
             {
                 if (permission.ShouldShowRationale())
                 {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        Application.Current.MainPage.DisplayAlert("Error", "The app needs access to your location.", "Ok");
-                    });
+                    throw new PermissionException("Location permision not granted.");
                 }
-
-                status = await permission.RequestAsync();
+                
+                await Device.InvokeOnMainThreadAsync(async () => status = await permission.RequestAsync());
             }
 
             return status;
