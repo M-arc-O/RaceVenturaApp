@@ -54,6 +54,10 @@ namespace RaceVentura.Services
                         await Application.Current.MainPage.DisplayAlert("Warning", "The application needs access to your location. Please click allow when asked or give access to the location in the settings of your device.", "Ok");
                     });
                 }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
 
                 status = await Device.InvokeOnMainThreadAsync<PermissionStatus>(() =>
                 {
