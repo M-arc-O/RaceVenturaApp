@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using static Xamarin.Essentials.Permissions;
 
 namespace RaceVentura.Services
 {
@@ -13,7 +14,7 @@ namespace RaceVentura.Services
         {
             try
             {
-                var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+                var status = await CheckAndRequestPermissionAsync(new Permissions.LocationWhenInUse());
 
                 if (status != PermissionStatus.Granted)
                 {
@@ -38,6 +39,18 @@ namespace RaceVentura.Services
         {
             if (cts != null && !cts.IsCancellationRequested)
                 cts.Cancel();
+        }
+
+        public async Task<PermissionStatus> CheckAndRequestPermissionAsync<T>(T permission)
+            where T : BasePermission
+        {
+            var status = await permission.CheckStatusAsync();
+            if (status != PermissionStatus.Granted)
+            {
+                status = await permission.RequestAsync();
+            }
+
+            return status;
         }
     }
 }
