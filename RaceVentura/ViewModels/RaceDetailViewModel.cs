@@ -50,6 +50,10 @@ namespace RaceVentura.ViewModels
             {
                 Item.Points.Add(point);
             }
+            else
+            {
+                existingPoint.Registered = point.Registered;
+            }
 
             await DataStore.UpdateItemAsync(Item);
         }

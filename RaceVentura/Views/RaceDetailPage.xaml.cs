@@ -104,7 +104,7 @@ namespace RaceVentura.Views
                 var current = Connectivity.NetworkAccess;
                 if (current != NetworkAccess.Internet)
                 {
-                    await DisplayAlert("Warning", "You do not have an active internet connection. The point will be registered as soon as your phone is connected to the internet again.", "Ok");
+                    await DisplayAlert("Warning", "You do not have an active internet connection. The point will be registered on your phone and needs to be send when you have an internet connection.", "Ok");
                     await viewModel.AddPoint(point);
                     return;
                 }
@@ -121,6 +121,7 @@ namespace RaceVentura.Views
                     }
 
                     await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, location.Latitude, location.Longitude, answer);
+                    point.Registered = true;
                 }
 
                 await viewModel.AddPoint(point);
