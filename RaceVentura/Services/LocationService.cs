@@ -47,12 +47,7 @@ namespace RaceVentura.Services
         {
             var status = await permission.CheckStatusAsync();
             if (status != PermissionStatus.Granted)
-            {
-                if (permission.ShouldShowRationale())
-                {
-                    throw new PermissionException("Location permision not granted.");
-                }
-                
+            {                
                 await Device.InvokeOnMainThreadAsync(async () => status = await permission.RequestAsync());
             }
 
