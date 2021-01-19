@@ -1,6 +1,7 @@
 ﻿using Xamarin.Forms;
 using RaceVentura.Services;
 using RaceVentura.Views;
+using Xamarin.Essentials;
 
 namespace RaceVentura
 {
@@ -14,12 +15,16 @@ namespace RaceVentura
             DependencyService.Register<ParseQrCodeResultService>();
             DependencyService.Register<RaceVenturaApiClient>();
             DependencyService.Register<LocationService>();
+            DependencyService.Register<VersionService>();
+
+            VersionTracking.Track();
 
             MainPage = new MainPage();
         }
 
-        protected override void OnStart()
+        protected override async void OnStart()
         {
+            await (MainPage as MainPage).CheckVersion();
         }
 
         protected override void OnSleep()

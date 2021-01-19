@@ -14,6 +14,8 @@ namespace RaceVentura.Services
 
         Task<RegisterRaceEndModel> RegisterRaceEnd(Guid raceId, Guid uniqueId);
 
+        Task<string> GetAppLatestVersion();
+
         void GoToResultPage(Guid raceId);
     }
 }

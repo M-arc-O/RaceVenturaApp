@@ -6,6 +6,11 @@ namespace RaceVentura.ViewModels
 {
     public class AboutViewModel : BaseViewModel
     {
+        public string CurrentVersion
+        {
+            get { return VersionTracking.CurrentVersion; }
+        }
+
         public AboutViewModel()
         {
             Title = "About";
