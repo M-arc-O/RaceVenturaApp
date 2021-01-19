@@ -6,7 +6,6 @@ namespace RaceVentura
 {
     public partial class App : Application
     {
-
         public App()
         {
             InitializeComponent();
@@ -15,6 +14,7 @@ namespace RaceVentura
             DependencyService.Register<ParseQrCodeResultService>();
             DependencyService.Register<RaceVenturaApiClient>();
             DependencyService.Register<LocationService>();
+
             MainPage = new MainPage();
         }
 

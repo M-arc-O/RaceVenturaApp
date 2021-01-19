@@ -4,12 +4,45 @@
              x:Class="RaceVentura.App">
 
     <Application.Resources>
-        <ResourceDictionary>
-            <!--Global Styles-->
-            <Color x:Key="NavigationPrimary">#2196F3</Color>
-            <Style TargetType="NavigationPage">
-                <Setter Property="BarBackgroundColor" Value="{StaticResource NavigationPrimary}" />
-                <Setter Property="BarTextColor" Value="White" />
+        <ResourceDictionary>                        
+            <Color x:Key="ButtonBackground">#2196F3</Color>
+            <Color x:Key="ButtonText">#FFFFFF</Color>
+
+            <Color x:Key="NavigationBackgroundLight">#2196F3</Color>
+            <Color x:Key="NavigationBackgroundDark">#000000</Color>
+            <Color x:Key="NavigationTextColorLight">#FFFFFF</Color>
+            <Color x:Key="NavigationTextColorDark">#7C7A91</Color>
+            
+            <Color x:Key="TextColorLight">#000000</Color>
+            <Color x:Key="TextColorDark">#FFFFFF</Color>
+            <Color x:Key="BackgroundColorLight">#FFFFFF</Color>
+            <Color x:Key="BackgroundColorDark">#757575</Color>
+
+            <Style TargetType="ContentPage" ApplyToDerivedTypes="True">
+                <Setter Property="BackgroundColor"
+                        Value="{AppThemeBinding Light={StaticResource BackgroundColorLight}, Dark={StaticResource BackgroundColorDark}}" />
+            </Style>
+
+            <Style TargetType="Button" ApplyToDerivedTypes="True">
+                <Setter Property="BackgroundColor" Value="{StaticResource ButtonBackground}" />
+                <Setter Property="TextColor" Value="{StaticResource ButtonText}" />
+            </Style>
+
+            <Style TargetType="Label" ApplyToDerivedTypes="True">
+                <Setter Property="TextColor"
+                        Value="{AppThemeBinding Light={StaticResource TextColorLight}, Dark={StaticResource TextColorDark}}" />
+            </Style>
+
+            <Style TargetType="Span" ApplyToDerivedTypes="True">
+                <Setter Property="ForegroundColor"
+                        Value="{AppThemeBinding Light={StaticResource TextColorLight}, Dark={StaticResource TextColorDark}}" />
+            </Style>
+
+            <Style TargetType="NavigationPage" ApplyToDerivedTypes="True">
+                <Setter Property="BarBackgroundColor"
+                        Value="{AppThemeBinding Light={StaticResource NavigationBackgroundLight}, Dark={StaticResource NavigationBackgroundDark}}" />
+                <Setter Property="BarTextColor"
+                        Value="{AppThemeBinding Light={StaticResource NavigationTextColorLight}, Dark={StaticResource NavigationTextColorDark}}" />
             </Style>
         </ResourceDictionary>
     </Application.Resources>

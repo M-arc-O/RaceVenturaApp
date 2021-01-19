@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
+﻿using Xamarin.Forms;
 
 namespace RaceVentura.Views
 {
@@ -10,6 +7,15 @@ namespace RaceVentura.Views
         public MainPage()
         {
             InitializeComponent();
+
+            App.Current.UserAppTheme = OSAppTheme.Unspecified;
+
+            App.Current.RequestedThemeChanged += Current_RequestedThemeChanged;
+        }
+
+        private void Current_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+        {
+            App.Current.UserAppTheme = e.RequestedTheme;
         }
     }
 }

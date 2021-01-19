@@ -26,6 +26,5 @@
                 </OnPlatform>
             </NavigationPage.Icon>
         </NavigationPage>
-    </TabbedPage.Children>
-    
+    </TabbedPage.Children>    
 </TabbedPage>

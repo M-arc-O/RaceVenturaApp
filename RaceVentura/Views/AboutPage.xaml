@@ -11,9 +11,9 @@
     
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Color x:Key="Primary">#2196F3</Color>
-            <Color x:Key="Accent">#96d1ff</Color>
-            <Color x:Key="LightTextColor">#999999</Color>
+            <Color x:Key="LogoBackground">#96D1FF</Color>
+            <Color x:Key="VersionColorLight">#999999</Color>
+            <Color x:Key="VersionColorDark">#ebebeb</Color>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -22,22 +22,23 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
+        <StackLayout BackgroundColor="{StaticResource LogoBackground}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
             <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
                 <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                    <Image Source="RaceVenturaLogo.png" VerticalOptions="Center" HeightRequest="64" />
+                    <Image Source="RaceVenturaLogo.png" VerticalOptions="Center" HeightRequest="60" />
                 </ContentView>
             </StackLayout>
         </StackLayout>
         <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Vertical" Padding="16,40,16,40" Spacing="10">
+            <StackLayout Orientation="Vertical" Padding="16,40,16,40">
                 <Label FontSize="22">
                     <Label.FormattedText>
                         <FormattedString>
                             <FormattedString.Spans>
                                 <Span Text="RaceVentura" FontAttributes="Bold" FontSize="22" />
                                 <Span Text=" " />
-                                <Span Text="1.0.7" ForegroundColor="{StaticResource LightTextColor}" />
+                                <Span Text="1.0.7"
+                                      ForegroundColor="{AppThemeBinding Light={StaticResource VersionColorLight}, Dark={StaticResource VersionColorDark}}" />
                             </FormattedString.Spans>
                         </FormattedString>
                     </Label.FormattedText>
@@ -53,9 +54,7 @@
                     </Label.FormattedText>
                 </Label>
                 <Button Margin="0,10,0,0" Text="Learn more"
-                        Command="{Binding OpenWebCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
+                        Command="{Binding OpenWebCommand}" />
             </StackLayout>
         </ScrollView>
     </Grid>
