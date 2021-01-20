@@ -9,7 +9,7 @@ namespace RaceVentura.Views
     public partial class MainPage : TabbedPage
     {
         private const string appStoreUri = "https://apps.apple.com/us/app/raceventura/id1547990194?itsct=apps_box&itscg=30200";
-        private const string playStoreUri = "https://play.google.com/store/apps/details?id=com.companyname.raceventura&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1";
+        private const string playStoreUri = "https://play.google.com/store/apps/details?id=com.companyname.raceventura";
         private readonly IVersionService _versionService;
 
         public MainPage()

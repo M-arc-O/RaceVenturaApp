@@ -145,8 +145,8 @@ namespace RaceVentura.Services
 
             var response = await _httpClient.GetAsync(uri);
             var responseContent = await response.Content.ReadAsStringAsync();
-            return "1.0.9";
-            //return JsonConvert.DeserializeObject<string>(responseContent);
+
+            return JsonConvert.DeserializeObject<string>(responseContent);
         }
 
         public async void GoToResultPage(Guid raceId)
