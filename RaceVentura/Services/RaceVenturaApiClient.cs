@@ -141,12 +141,12 @@ namespace RaceVentura.Services
 
         public async Task<string> GetAppLatestVersion()
         {
-            Uri uri = new Uri($"{apiUrl}/version/getappversion");
+            Uri uri = new Uri($"{apiUrl}version/getappversion");
 
             var response = await _httpClient.GetAsync(uri);
             var responseContent = await response.Content.ReadAsStringAsync();
 
-            return JsonConvert.DeserializeObject<string>(responseContent);
+            return responseContent;
         }
 
         public async void GoToResultPage(Guid raceId)
