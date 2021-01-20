@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace RaceVentura.RaceVenturaApiModels
 {
     public class RaceVenturaApiException : Exception

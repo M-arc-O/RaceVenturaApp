@@ -1,4 +1,5 @@
 ﻿using System;
+
 namespace RaceVentura.Models
 {
     public class QrCodeResult
