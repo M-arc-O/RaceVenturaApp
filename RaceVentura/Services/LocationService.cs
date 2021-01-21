@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
-using static Xamarin.Essentials.Permissions;
+using Xamarin.Forms;
 
 namespace RaceVentura.Services
 {
@@ -41,13 +41,28 @@ namespace RaceVentura.Services
                 cts.Cancel();
         }
 
-        public async Task<PermissionStatus> CheckAndRequestPermissionAsync<T>(T permission)
-            where T : BasePermission
+        private async Task<PermissionStatus> CheckAndRequestPermissionAsync<T>(T permission)
+            where T : Permissions.BasePermission
         {
             var status = await permission.CheckStatusAsync();
             if (status != PermissionStatus.Granted)
             {
-                status = await permission.RequestAsync();
+                if(permission.ShouldShowRationale())
+                {
+                    await Device.InvokeOnMainThreadAsync(async () =>
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Warning", "The application needs access to your location. Please click allow when asked or give access to the location in the settings of your device.", "Ok");
+                    });
+                }
+                else
+                {
+                    Thread.Sleep(1000);
+                }
+
+                status = await Device.InvokeOnMainThreadAsync<PermissionStatus>(() =>
+                {
+                    return permission.RequestAsync();
+                });
             }
 
             return status;

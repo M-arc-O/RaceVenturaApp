@@ -1,5 +1,4 @@
-﻿using System;
-using RaceVentura.Models;
+﻿using RaceVentura.Models;
 
 namespace RaceVentura.Services
 {
