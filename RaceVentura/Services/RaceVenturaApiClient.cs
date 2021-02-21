@@ -11,7 +11,7 @@ namespace RaceVentura.Services
     public class RaceVenturaApiClient : IRaceVenturaApiClient
     {
         private readonly HttpClient _httpClient;
-        private const string webUrl = "https://raceventura.nl/#/";
+        private const string webUrl = "https://raceventura.nl/";
         private const string apiUrl = "https://raceventura.westeurope.cloudapp.azure.com/api/";
         private readonly string appApiUrl = $"{apiUrl}appapi";
 
