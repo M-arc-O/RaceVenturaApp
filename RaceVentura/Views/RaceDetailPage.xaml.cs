@@ -101,9 +101,9 @@ namespace RaceVentura.Views
 
                 var response = await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, location.Latitude, location.Longitude, string.Empty);
 
-                if (!string.IsNullOrEmpty(response.Question))
+                if (response.Type == PointTypeViewModel.QuestionCheckPoint)
                 {
-                    answer = await DisplayPromptAsync("Question!", response.Question);
+                    answer = await DisplayPromptAsync("Question!", response.Message);
 
                     if (string.IsNullOrEmpty(answer))
                     {
@@ -111,6 +111,13 @@ namespace RaceVentura.Views
                     }
 
                     await _raceVenturaApiClient.RegisterPoint(parsedResult.RaceId, viewModel.Item.UniqueId, parsedResult.PointId, location.Latitude, location.Longitude, answer);
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(response.Message))
+                    {
+                        await DisplayAlert("Message", response.Message, "Ok");
+                    }
                 }
 
                 await DisplayAlert("Congratulations", "Point registered! Good luck finding the next point!", "Ok");

@@ -22,7 +22,7 @@ namespace RaceVentura.Services
 
         public async Task<RegisterToRaceModel> RegisterToRace(Guid raceId, Guid teamId, Guid uniqueId)
         {
-            Uri uri = new Uri($"{appApiUrl}/registertorace");
+            Uri uri = new($"{appApiUrl}/registertorace");
 
             var model = new RegisterToRaceModel
             {
@@ -32,7 +32,7 @@ namespace RaceVentura.Services
             };
 
             string json = JsonConvert.SerializeObject(model);
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent content = new(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(uri, content);
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -51,7 +51,7 @@ namespace RaceVentura.Services
 
         public async Task<RegisterPointModel> RegisterPoint(Guid raceId, Guid uniqueId, Guid pointId, double latitude, double longitude, string answer)
         {
-            Uri uri = new Uri($"{appApiUrl}/registerpoint");
+            Uri uri = new($"{appApiUrl}/registerpoint");
 
             var model = new RegisterPointModel
             {
@@ -60,12 +60,11 @@ namespace RaceVentura.Services
                 UniqueId = uniqueId,
                 Latitude = latitude,
                 Longitude = longitude,
-                Question = null,
                 Answer = answer.Trim()
             };
 
             string json = JsonConvert.SerializeObject(model);
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent content = new(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(uri, content);
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -76,7 +75,7 @@ namespace RaceVentura.Services
             }
             else
             {
-                ProcessApiError(responseContent, "register to race");
+                ProcessApiError(responseContent, "register point");
             }
 
             return model;
@@ -84,7 +83,7 @@ namespace RaceVentura.Services
 
         public async Task<RegisterStageEndModel> RegisterStageEnd(Guid raceId, Guid uniqueId, Guid stageId)
         {
-            Uri uri = new Uri($"{appApiUrl}/registerstageend");
+            Uri uri = new($"{appApiUrl}/registerstageend");
 
             var model = new RegisterStageEndModel
             {
@@ -94,7 +93,7 @@ namespace RaceVentura.Services
             };
 
             string json = JsonConvert.SerializeObject(model);
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent content = new(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(uri, content);
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -113,7 +112,7 @@ namespace RaceVentura.Services
 
         public async Task<RegisterRaceEndModel> RegisterRaceEnd(Guid raceId, Guid uniqueId)
         {
-            Uri uri = new Uri($"{appApiUrl}/registerraceend");
+            Uri uri = new($"{appApiUrl}/registerraceend");
 
             var model = new RegisterRaceEndModel
             {
@@ -122,7 +121,7 @@ namespace RaceVentura.Services
             };
 
             string json = JsonConvert.SerializeObject(model);
-            StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+            StringContent content = new(json, Encoding.UTF8, "application/json");
 
             var response = await _httpClient.PostAsync(uri, content);
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -141,7 +140,7 @@ namespace RaceVentura.Services
 
         public async Task<string> GetAppLatestVersion()
         {
-            Uri uri = new Uri($"{apiUrl}version/getappversion");
+            Uri uri = new($"{apiUrl}version/getappversion");
 
             var response = await _httpClient.GetAsync(uri);
             var responseContent = await response.Content.ReadAsStringAsync();
@@ -156,8 +155,7 @@ namespace RaceVentura.Services
 
         private static void ProcessApiError(string responseContent, string function)
         {
-            ErrorCodes errorCode;
-            if (Enum.TryParse(responseContent, out errorCode))
+            if (Enum.TryParse(responseContent, out ErrorCodes errorCode))
             {
                 throw new RaceVenturaApiException($"Something went wrong in {function}.", errorCode);
             }
