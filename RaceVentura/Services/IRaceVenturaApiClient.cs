@@ -17,5 +17,6 @@ namespace RaceVentura.Services
         Task<string> GetAppLatestVersion();
 
         void GoToResultPage(Guid raceId);
+        void ShareRaceResults(Guid raceId);
     }
 }

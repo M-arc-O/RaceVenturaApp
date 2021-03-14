@@ -238,5 +238,25 @@ namespace RaceVentura.Views
                 });
             }
         }
+
+        private void ShareRaceResults_Clicked(System.Object sender, System.EventArgs e)
+        {
+            try
+            {
+                _raceVenturaApiClient.ShareRaceResults(viewModel.Item.RaceId);
+            }
+            catch (Exception)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    DisplayAlert("Error", "Something went wrong when sharing the results.", "Ok");
+                });
+            }
+        }
+
+        private void RemoveRace_Clicked(System.Object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

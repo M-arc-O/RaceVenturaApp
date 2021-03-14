@@ -150,7 +150,21 @@ namespace RaceVentura.Services
 
         public async void GoToResultPage(Guid raceId)
         {
-            await Browser.OpenAsync(new Uri($"{webUrl}results?raceid={raceId}"), BrowserLaunchMode.SystemPreferred);
+            await Browser.OpenAsync(GetRaceResultUri(raceId), BrowserLaunchMode.SystemPreferred);
+        }
+
+        public async void ShareRaceResults(Guid raceId)
+        {
+            await Share.RequestAsync(new ShareTextRequest
+            {
+                Uri = GetRaceResultUri(raceId).ToString(),
+                Title = "Race result URL"
+            });
+        }
+
+        private Uri GetRaceResultUri(Guid raceId)
+        {
+            return new Uri($"{webUrl}results?raceid={raceId}");
         }
 
         private static void ProcessApiError(string responseContent, string function)

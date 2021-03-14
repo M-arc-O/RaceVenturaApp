@@ -31,8 +31,21 @@
             </StackLayout>
 
             <StackLayout VerticalOptions="End">
-                <Button Text="Go to race results"
-                        Clicked="ResultButton_Clicked"
+                <Label Text="Disabled until the race is finished:" FontSize="Medium" IsEnabled="False" />
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="FillAndExpand">
+                    <Button Text="Go to race results"
+                            HorizontalOptions="FillAndExpand"
+                            Clicked="ResultButton_Clicked"
+                            IsEnabled="{Binding RaceActive, Converter={StaticResource InvertBoolConverter}}" />
+                    <Button Text="Share race results"
+                            HorizontalOptions="FillAndExpand"
+                            Clicked="ShareRaceResults_Clicked"
+                            IsEnabled="{Binding RaceActive, Converter={StaticResource InvertBoolConverter}}" />
+                </StackLayout>
+                <Button Text="Delete Race"
+                        BackgroundColor="Red"
+                        Clicked="RemoveRace_Clicked"
                         IsEnabled="{Binding RaceActive, Converter={StaticResource InvertBoolConverter}}" />
             </StackLayout>
         </StackLayout>
