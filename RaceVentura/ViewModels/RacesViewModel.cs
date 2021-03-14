@@ -27,6 +27,13 @@ namespace RaceVentura.ViewModels
                 Items.Add(newItem);
                 await DataStore.AddItemAsync(newItem);
             });
+
+            MessagingCenter.Subscribe<RaceDetailPage, Race>(this, "RemoveItem", async (obj, item) =>
+            {
+                var removeItem = item as Race;
+                Items.Remove(removeItem);
+                await DataStore.DeleteItemAsync(removeItem);
+            });
         }
 
         async Task ExecuteLoadItemsCommand()

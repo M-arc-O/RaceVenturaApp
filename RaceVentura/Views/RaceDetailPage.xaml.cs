@@ -224,7 +224,7 @@ namespace RaceVentura.Views
             await DisplayAlert("Done", message, "Ok");
         }
 
-        private void ResultButton_Clicked(System.Object sender, System.EventArgs e)
+        private async void ResultButton_Clicked(System.Object sender, System.EventArgs e)
         {
             try
             {
@@ -232,14 +232,11 @@ namespace RaceVentura.Views
             }
             catch (Exception)
             {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    DisplayAlert("Error", "Something went wrong when opening the browser.", "Ok");
-                });
+                await DisplayAlert("Error", "Something went wrong when opening the browser.", "Ok");
             }
         }
 
-        private void ShareRaceResults_Clicked(System.Object sender, System.EventArgs e)
+        private async void ShareRaceResults_Clicked(System.Object sender, System.EventArgs e)
         {
             try
             {
@@ -247,16 +244,27 @@ namespace RaceVentura.Views
             }
             catch (Exception)
             {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    DisplayAlert("Error", "Something went wrong when sharing the results.", "Ok");
-                });
+                await DisplayAlert("Error", "Something went wrong while sharing the results.", "Ok");
             }
         }
 
-        private void RemoveRace_Clicked(System.Object sender, System.EventArgs e)
+        private async void RemoveRace_Clicked(System.Object sender, System.EventArgs e)
         {
+            try
+            {
+                var result = await DisplayAlert("Important", "You are about to remove the race from your device. Are you sure you want to continue?", "Yes", "No");
 
+                if (result)
+                { 
+                    MessagingCenter.Send(this, "RemoveItem", viewModel.Item);
+
+                    await Navigation.PopToRootAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await DisplayAlert("Error", "Something went wrong while deleting the race.", "Ok");
+            }
         }
     }
 }
