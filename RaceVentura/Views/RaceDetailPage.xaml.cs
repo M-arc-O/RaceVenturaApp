@@ -150,6 +150,10 @@ namespace RaceVentura.Views
                         await DisplayAlert("Error", "You cannot register this point because the race did not start yet!", "Ok");
                         break;
 
+                    case ErrorCodes.RaceEnded:
+                        await DisplayAlert("Error", "Your team has finished the race, you cannot register points any more.", "Ok");
+                        break;
+
                     default:
                         throw new Exception("Unknown error code.");
                 }
@@ -179,6 +183,10 @@ namespace RaceVentura.Views
 
                     case ErrorCodes.RaceNotStarted:
                         await DisplayAlert("Error", "You cannot end this stage because the race has not started yet!", "Ok");
+                        break;
+
+                    case ErrorCodes.RaceEnded:
+                        await DisplayAlert("Error", "Your team has finished the race, you cannot register stage ends any more.", "Ok");
                         break;
 
                     default:
@@ -261,7 +269,7 @@ namespace RaceVentura.Views
                     await Navigation.PopToRootAsync();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 await DisplayAlert("Error", "Something went wrong while deleting the race.", "Ok");
             }

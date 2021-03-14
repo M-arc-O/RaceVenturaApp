@@ -87,6 +87,13 @@ namespace RaceVentura.Views
                         });
                         break;
 
+                    case ErrorCodes.RaceEnded:
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            ShowPopupAndLeavePage("Error", "The team you are trying to register to has finished the race, you cannot register to this team anymore.");
+                        });
+                        break;
+
                     default:
                         Device.BeginInvokeOnMainThread(() =>
                         {
