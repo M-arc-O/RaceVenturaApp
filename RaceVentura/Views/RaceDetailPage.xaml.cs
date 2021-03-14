@@ -213,7 +213,7 @@ namespace RaceVentura.Views
                 switch (ex.ErrorCode)
                 {
                     case ErrorCodes.RaceNotStarted:
-                        await DisplayAlert("Error", "You cannot end this stage because the race has not started yet!", "Ok");
+                        await DisplayAlert("Error", "You cannot end this race because the race has not started yet!", "Ok");
                         break;
 
                     case ErrorCodes.RaceEnded:
